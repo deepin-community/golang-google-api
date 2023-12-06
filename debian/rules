@@ -1,4 +1,14 @@
 #!/usr/bin/make -f
 
+# The example programs should not be compiled, and we are not interested in the
+# generator itself either, only its output.
+export DH_GOLANG_EXCLUDES := google.golang.org/api/google-api-go-generator google.golang.org/api/examples google.golang.org/api/internal/kokoro/synth/sendpr
+
+export DH_GOLANG_INSTALL_EXTRA := internal/service-account.json
+
 %:
-	dh $@
+	dh $@ --buildsystem=golang
+
+# Skip integration tests which require some Service Account Key File
+override_dh_auto_test:
+	dh_auto_test -- -short
