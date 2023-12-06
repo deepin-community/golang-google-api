@@ -1,0 +1,55 @@
+From: M Hickford <mirth.hickford@gmail.com>
+Date: Tue, 19 Dec 2023 16:07:56 +0000
+Subject: ignore unexported field when testing with google oauth2
+
+Debian-Bug: https://bugs.debian.org/1058532
+---
+ internal/creds_test.go | 5 +++--
+ option/option_test.go  | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/internal/creds_test.go b/internal/creds_test.go
+index 34b052d..23e87b1 100644
+--- a/internal/creds_test.go
++++ b/internal/creds_test.go
+@@ -9,6 +9,7 @@ import (
+ 	"testing"
+ 
+ 	"github.com/google/go-cmp/cmp"
++	"github.com/google/go-cmp/cmp/cmpopts"
+ 	"golang.org/x/oauth2"
+ 	"golang.org/x/oauth2/google"
+ )
+@@ -28,7 +29,7 @@ func TestTokenSource(t *testing.T) {
+ 		t.Fatal(err)
+ 	}
+ 	want := &google.DefaultCredentials{TokenSource: ts}
+-	if !cmp.Equal(got, want) {
++	if !cmp.Equal(got, want, cmpopts.IgnoreUnexported(google.Credentials{})) {
+ 		t.Error("did not get the same TokenSource back")
+ 	}
+ 
+@@ -44,7 +45,7 @@ func TestTokenSource(t *testing.T) {
+ 	if err != nil {
+ 		t.Fatal(err)
+ 	}
+-	if cmp.Equal(got, want) {
++	if cmp.Equal(got, want, cmpopts.IgnoreUnexported(google.Credentials{})) {
+ 		t.Error("got the same TokenSource back, wanted one from the JSON file")
+ 	}
+ 	// TODO(jba): find a way to test the call to google.DefaultTokenSource.
+diff --git a/option/option_test.go b/option/option_test.go
+index 089d586..a587d02 100644
+--- a/option/option_test.go
++++ b/option/option_test.go
+@@ -92,8 +92,8 @@ func TestApply(t *testing.T) {
+ 		RequestReason:     "Request Reason",
+ 		TelemetryDisabled: true,
+ 	}
+-	if !cmp.Equal(got, want, cmpopts.IgnoreUnexported(grpc.ClientConn{})) {
+-		t.Errorf(cmp.Diff(got, want, cmpopts.IgnoreUnexported(grpc.ClientConn{})))
++	if !cmp.Equal(got, want, cmpopts.IgnoreUnexported(grpc.ClientConn{}), cmpopts.IgnoreUnexported(google.Credentials{})) {
++		t.Errorf(cmp.Diff(got, want, cmpopts.IgnoreUnexported(grpc.ClientConn{}), cmpopts.IgnoreUnexported(google.Credentials{})))
+ 	}
+ }
+ 
