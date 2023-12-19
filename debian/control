@@ -1,15 +1,50 @@
-Source: template-repository
-Section: unknown
+Source: golang-google-api
+Section: golang
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Debian Go Packaging Team <team+pkg-go@tracker.debian.org>
+Uploaders: Martina Ferrari <tina@debian.org>,
+           Michael Stapelberg <stapelberg@debian.org>,
+           Tim Potter <tpot@hpe.com>,
+           Anthony Fok <foka@debian.org>
+Rules-Requires-Root: no
+Build-Depends: debhelper-compat (= 13),
+               dh-golang (>= 1.53~),
+               dh-sequence-golang,
+               golang-any,
+               golang-github-google-go-cmp-dev (>= 0.5.6),
+               golang-github-googleapis-gax-go-dev (>= 2.0.5),
+               golang-go.opencensus-dev (>= 0.23.0),
+               golang-golang-x-net-dev (>= 1:0.0+git20210503.7fd8e65),
+               golang-golang-x-oauth2-dev (>= 0.0~git20211104.d3ed0bb),
+               golang-golang-x-oauth2-google-dev (>= 0.0~git20211104.d3ed0bb),
+               golang-golang-x-sync-dev (>= 0.0~git20210220.036812b),
+               golang-golang-x-sys-dev (>= 0.0~git20211124.fe61309),
+               golang-google-cloud-compute-metadata-dev (>= 0.56.0),
+               golang-google-genproto-dev,
+               golang-google-grpc-dev
+Testsuite: autopkgtest-pkg-go
+Standards-Version: 4.6.0
+Vcs-Browser: https://salsa.debian.org/go-team/packages/golang-google-api
+Vcs-Git: https://salsa.debian.org/go-team/packages/golang-google-api.git
+Homepage: https://google.golang.org/api
+XS-Go-Import-Path: google.golang.org/api
 
-Package: template-repository
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Package: golang-google-api-dev
+Architecture: all
+Multi-Arch: foreign
+Depends: golang-github-google-go-cmp-dev (>= 0.5.6),
+         golang-github-googleapis-gax-go-dev (>= 2.0.5),
+         golang-go.opencensus-dev (>= 0.23.0),
+         golang-golang-x-net-dev (>= 1:0.0+git20210503.7fd8e65),
+         golang-golang-x-oauth2-dev (>= 0.0~git20211104.d3ed0bb),
+         golang-golang-x-oauth2-google-dev (>= 0.0~git20211104.d3ed0bb),
+         golang-golang-x-sync-dev (>= 0.0~git20210220.036812b),
+         golang-golang-x-sys-dev (>= 0.0~git20211124.fe61309),
+         golang-google-cloud-compute-metadata-dev (>= 0.56.0),
+         golang-google-genproto-dev,
+         golang-google-grpc-dev,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Google APIs Client Library
+ These are auto-generated Go libraries from the Google Discovery Service's JSON
+ description files of the available "new style" Google APIs.
